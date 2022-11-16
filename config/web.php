@@ -6,18 +6,15 @@ use yii\db\Expression;
 use yii\db\Query;
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
 $baseUrl = str_replace('/web', '', (new Request)->getBaseUrl());
 
 $config = [
-    'id' => 'Api.Order.v2',
+    'id' => 'Rest',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
 	'sourceLanguage' => 'id',
 	'language' => 'id',    
-    'aliases' => [
-        '@bower' => '@vendor/bower-asset',
-    ],
+    'aliases' => [ ],
     'defaultRoute' => '/welcome',
     'homeUrl' => '/welcome',    
     'components' => [
@@ -52,10 +49,6 @@ $config = [
                 'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'sourceLanguage' => 'id',
-                    'fileMap' => [
-                        'app' => 'app.php', 
-                        'app/error' => 'error.php', 
-                    ], 
                 ],
             ],
         ],// i18n
@@ -69,12 +62,10 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [
-            ],
+            'rules' => [ ],
         ],
     ],
     'params' => $params,
