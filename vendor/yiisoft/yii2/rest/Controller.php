@@ -49,21 +49,21 @@ class Controller extends \yii\web\Controller
     {
         return [
             'contentNegotiator' => [
-                'class' => ContentNegotiator::className(),
+                'class' => ContentNegotiator::class,
                 'formats' => [
+                    // 'application/xml' => Response::FORMAT_XML,
                     'application/json' => Response::FORMAT_JSON,
-                    'application/xml' => Response::FORMAT_XML,
                 ],
             ],
             'verbFilter' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => $this->verbs(),
             ],
             'authenticator' => [
-                'class' => CompositeAuth::className(),
+                'class' => CompositeAuth::class,
             ],
             'rateLimiter' => [
-                'class' => RateLimiter::className(),
+                'class' => RateLimiter::class,
             ],
         ];
     }
@@ -97,5 +97,34 @@ class Controller extends \yii\web\Controller
     protected function serializeData($data)
     {
         return Yii::createObject($this->serializer)->serialize($data);
+    }
+
+    public function onSucces(array $data,string $message = 'OK',int $code = 200):array
+    {
+        return [
+            'status' => true,
+            'code' => $code,
+            'message' => $message,
+            'data' => $data,
+        ];
+    }
+
+    public function onError(string $message = 'Erorr',int $code = 403):array
+    {
+        $this->setResponseError($code,$message);
+        return [
+            'error' => [
+                'status' => false,
+                'code' => $code,
+                'message' => $message,
+            ],
+        ];
+    }
+
+    private function setResponseError($code,$message):void
+    {   
+        $response = Yii::$app->response;
+        $response->statusText = $message;
+        $response->setStatusCode($code,$message);        
     }
 }
