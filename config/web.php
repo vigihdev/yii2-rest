@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\web\Request;
 use yii\db\Expression;
 use yii\db\Query;
+use yii\web\Response;
 
 $params = require __DIR__ . '/params.php';
 $baseUrl = str_replace('/web', '', (new Request)->getBaseUrl());
@@ -18,6 +19,10 @@ $config = [
     'defaultRoute' => '/welcome',
     'homeUrl' => '/welcome',    
     'components' => [
+        'response' => [
+            'format' => Response::FORMAT_JSON,
+        ],
+
         'request' => [
             'cookieValidationKey' => 'WjPrJ_d9b9zKUjWv5NYx_7bx6WYwNUfo',
             'baseUrl' => $baseUrl,
@@ -33,10 +38,6 @@ $config = [
             'identityClass' => 'app\models\users\User',
 			'enableSession' => false, 
 			'loginUrl' => null            
-        ],
-
-        'errorHandler' => [
-            'errorAction' => 'error',
         ],
 
         'dateNow' => function(){
@@ -62,10 +63,13 @@ $config = [
                 ],
             ],
         ],
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'rules' => [ ],
+            'rules' => [ 
+                'baseUrl' => $baseUrl,
+            ],
         ],
     ],
     'params' => $params,

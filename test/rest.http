@@ -1,14 +1,20 @@
 @hostname = rest.dev.yii2
 @error401 = error401
+@error404 = error404
 @error500 = error500
 @errorexception = errorexception
 @errormodel = errormodel
 @contentType = application/json
 
 
-POST https://{{hostname}}/test
+POST https://{{hostname}}/test/
 Content-Type: {{contentType}}
 
+###
+POST https://{{hostname}}/test/{{error404}}
+Content-Type: {{contentType}}
+
+###
 POST https://{{hostname}}/test/{{error401}}
 Content-Type: {{contentType}}
 

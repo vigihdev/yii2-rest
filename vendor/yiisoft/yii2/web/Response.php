@@ -353,7 +353,6 @@ class Response extends \yii\base\Response
 
     private function formatErrorResponse():void
     {
-
         if(is_array($this->data) && !empty($this->data)){
             $exception = new ResponseException($this->data);
             if(!empty($exception->getType()) && !empty($exception->getName())){
