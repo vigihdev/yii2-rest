@@ -26,8 +26,9 @@ class TestController extends \yii\rest\Controller
 
     public function actionError500()
     {
+        throw new HttpException(402, "Error Processing Request",);
         // $model = new Bawuk();
-        return $this->onError('Test Error Message', 500);
+        return $this->onError('Test Error Message', 400);
     }
 
     public function actionErrorexception()

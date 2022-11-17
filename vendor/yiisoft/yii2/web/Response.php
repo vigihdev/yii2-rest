@@ -259,7 +259,9 @@ class Response extends \yii\base\Response
             $this->charset = Yii::$app->charset;
         }
         $this->formatters = array_merge($this->defaultFormatters(), $this->formatters);
+
     }
+
 
     /**
      * @return int the HTTP status code to send with the response.
@@ -327,6 +329,40 @@ class Response extends \yii\base\Response
         return $this->_headers;
     }
 
+    private function setSuccesResponse(array $data,string $message = 'OK',int $code = 200):array
+    {
+        return $this->data = [
+            'status' => true,
+            'code' => $this->statusCode,
+            'message' => $this->statusText,
+            'data' => $data,
+        ];
+    }
+
+    private function setErrorResponse(string $message = 'Erorr'):array
+    {
+        return $this->data = [
+            'error' => [
+                'status' => false,
+                'code' => $this->statusCode,
+                'message' => $message,
+            ],
+        ];
+    }
+
+
+    private function formatErrorResponse():void
+    {
+
+        if(is_array($this->data) && !empty($this->data)){
+            $exception = new ResponseException($this->data);
+            if(!empty($exception->getType()) && !empty($exception->getName())){
+                $this->setErrorResponse($exception->getMessage());
+            }
+        }
+    }
+
+
     /**
      * Sends the response to the client.
      */
@@ -335,6 +371,7 @@ class Response extends \yii\base\Response
         if ($this->isSent) {
             return;
         }
+        $this->formatErrorResponse();
         $this->trigger(self::EVENT_BEFORE_SEND);
         $this->prepare();
         $this->trigger(self::EVENT_AFTER_PREPARE);
